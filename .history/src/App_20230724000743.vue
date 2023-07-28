@@ -125,6 +125,8 @@ export default {
       const shouldDisable = Math.random() < 0.4;
 
       if (shouldMove) {
+        // const button = document.querySelector(".cash-out-button");
+        // button.style.transform = `translateX(${randomDirection * 300}px)`;
         this.cashOutTransition = randomDirection * 300;
       }
 
@@ -173,6 +175,14 @@ body {
 
 .slots {
   display: flex;
+  /* background: rgb(255, 222, 1);
+  background: linear-gradient(
+    261deg,
+    rgba(255, 222, 1, 1) 0%,
+    rgba(255, 185, 33, 1) 100%
+  );
+  padding: 10px;
+  border-radius: 10px; */
 }
 
 .slot {

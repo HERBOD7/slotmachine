@@ -125,6 +125,8 @@ export default {
       const shouldDisable = Math.random() < 0.4;
 
       if (shouldMove) {
+        // const button = document.querySelector(".cash-out-button");
+        // button.style.transform = `translateX(${randomDirection * 300}px)`;
         this.cashOutTransition = randomDirection * 300;
       }
 

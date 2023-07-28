@@ -20,18 +20,7 @@
         >
           Spin
         </button>
-        <button
-          :disabled="isShuffling || credit === 0"
-          :class="[{ unclickable: unclickable }, 'cashOut']"
-          :style="{
-            transform:
-              `translateX(${cashOutTransition}px)` ||
-              `translateY(${cashOutTransition}px)`,
-          }"
-          @mouseover="handleCashOutHover"
-        >
-          CASH OUT
-        </button>
+        <button>CASH OUT</button>
       </div>
     </div>
   </div>
@@ -39,7 +28,6 @@
 
 <script>
 import SlotBox from "./components/SlotBox.vue";
-import { rollsSymbols } from "./constant/rollsSymbols";
 
 export default {
   name: "App",
@@ -48,7 +36,74 @@ export default {
   },
   data() {
     return {
-      symbols: rollsSymbols,
+      symbols: {
+        firstSlot: [
+          {
+            name: "cherry",
+            value: 10,
+            emoji: "🍒",
+          },
+          {
+            name: "lemon",
+            value: 20,
+            emoji: "🍋",
+          },
+          {
+            name: "orange",
+            value: 30,
+            emoji: "🍊",
+          },
+          {
+            name: "watermelon",
+            value: 40,
+            emoji: "🍉",
+          },
+        ],
+        secondSlot: [
+          {
+            name: "cherry",
+            value: 10,
+            emoji: "🍒",
+          },
+          {
+            name: "lemon",
+            value: 20,
+            emoji: "🍋",
+          },
+          {
+            name: "orange",
+            value: 30,
+            emoji: "🍊",
+          },
+          {
+            name: "watermelon",
+            value: 40,
+            emoji: "🍉",
+          },
+        ],
+        thirdSlot: [
+          {
+            name: "cherry",
+            value: 10,
+            emoji: "🍒",
+          },
+          {
+            name: "lemon",
+            value: 20,
+            emoji: "🍋",
+          },
+          {
+            name: "orange",
+            value: 30,
+            emoji: "🍊",
+          },
+          {
+            name: "watermelon",
+            value: 40,
+            emoji: "🍉",
+          },
+        ],
+      },
       isShuffling: false,
       credit: 10,
       audio: {
@@ -62,8 +117,6 @@ export default {
           "https://freesound.org/data/previews/387/387232_1474204-lq.mp3"
         ),
       },
-      unclickable: false,
-      cashOutTransition: 0,
     };
   },
   methods: {
@@ -81,12 +134,12 @@ export default {
           rolledSymbols.push(shuffleArr[0]);
         }
 
-        if (this.credit >= 40 && this.credit < 60) {
+        if (this.credits >= 40 && this.credits < 60) {
           const shouldReroll = Math.random() < 0.3;
           if (shouldReroll) {
             this.spin();
           }
-        } else if (this.credit >= 60) {
+        } else if (this.credits >= 60) {
           const shouldReroll = Math.random() < 0.6;
           if (shouldReroll) {
             this.spin();
@@ -119,18 +172,9 @@ export default {
       }
       return array;
     },
-    handleCashOutHover() {
-      const randomDirection = Math.random() < 0.5 ? -1 : 1;
-      const shouldMove = Math.random() < 0.5;
-      const shouldDisable = Math.random() < 0.4;
-
-      if (shouldMove) {
-        this.cashOutTransition = randomDirection * 300;
-      }
-
-      if (shouldDisable) {
-        this.unclickable = true;
-      }
+    cashOut() {
+      this.credits += this.reward;
+      this.reward = 0;
     },
   },
 };
@@ -173,6 +217,14 @@ body {
 
 .slots {
   display: flex;
+  /* background: rgb(255, 222, 1);
+  background: linear-gradient(
+    261deg,
+    rgba(255, 222, 1, 1) 0%,
+    rgba(255, 185, 33, 1) 100%
+  );
+  padding: 10px;
+  border-radius: 10px; */
 }
 
 .slot {
@@ -210,7 +262,7 @@ button {
   padding: 5px;
   border-radius: 5px;
   color: white;
-  width: 30%;
+  width: 50%;
   font-size: 20px;
   font-weight: bold;
 }
@@ -233,16 +285,5 @@ button {
 
 .spinner:hover {
   background-position: right center;
-}
-
-.cashOut {
-  height: 80px;
-  width: 80px;
-  font-size: 14px;
-  border-radius: 50%;
-}
-
-.unclickable {
-  pointer-events: none;
 }
 </style>

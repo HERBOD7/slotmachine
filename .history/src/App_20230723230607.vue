@@ -13,24 +13,8 @@
 
       <div class="buttons">
         <div class="credit">{{ credit }}</div>
-        <button
-          @click="spin"
-          class="spinner"
-          :disabled="!this.credit || isShuffling"
-        >
+        <button @click="spin" class="spinner" :disabled="!this.credit">
           Spin
-        </button>
-        <button
-          :disabled="isShuffling || credit === 0"
-          :class="[{ unclickable: unclickable }, 'cashOut']"
-          :style="{
-            transform:
-              `translateX(${cashOutTransition}px)` ||
-              `translateY(${cashOutTransition}px)`,
-          }"
-          @mouseover="handleCashOutHover"
-        >
-          CASH OUT
         </button>
       </div>
     </div>
@@ -39,7 +23,6 @@
 
 <script>
 import SlotBox from "./components/SlotBox.vue";
-import { rollsSymbols } from "./constant/rollsSymbols";
 
 export default {
   name: "App",
@@ -48,7 +31,74 @@ export default {
   },
   data() {
     return {
-      symbols: rollsSymbols,
+      symbols: {
+        firstSlot: [
+          {
+            name: "cherry",
+            value: 10,
+            emoji: "🍒",
+          },
+          {
+            name: "lemon",
+            value: 20,
+            emoji: "🍋",
+          },
+          {
+            name: "orange",
+            value: 30,
+            emoji: "🍊",
+          },
+          {
+            name: "watermelon",
+            value: 40,
+            emoji: "🍉",
+          },
+        ],
+        secondSlot: [
+          {
+            name: "cherry",
+            value: 10,
+            emoji: "🍒",
+          },
+          {
+            name: "lemon",
+            value: 20,
+            emoji: "🍋",
+          },
+          {
+            name: "orange",
+            value: 30,
+            emoji: "🍊",
+          },
+          {
+            name: "watermelon",
+            value: 40,
+            emoji: "🍉",
+          },
+        ],
+        thirdSlot: [
+          {
+            name: "cherry",
+            value: 10,
+            emoji: "🍒",
+          },
+          {
+            name: "lemon",
+            value: 20,
+            emoji: "🍋",
+          },
+          {
+            name: "orange",
+            value: 30,
+            emoji: "🍊",
+          },
+          {
+            name: "watermelon",
+            value: 40,
+            emoji: "🍉",
+          },
+        ],
+      },
       isShuffling: false,
       credit: 10,
       audio: {
@@ -58,12 +108,7 @@ export default {
         spinEnd: new Audio(
           "https://freesound.org/data/previews/145/145441_2615119-lq.mp3"
         ),
-        win: new Audio(
-          "https://freesound.org/data/previews/387/387232_1474204-lq.mp3"
-        ),
       },
-      unclickable: false,
-      cashOutTransition: 0,
     };
   },
   methods: {
@@ -72,34 +117,36 @@ export default {
         this.credit--;
         this.audio.spin.play();
         this.isShuffling = true;
-        let rolledSymbols = [];
+        let selectedSymbols = [];
         for (let name in this.symbols) {
           const arr = [];
           arr.push(...this.symbols[name]);
           const shuffleArr = this.shuffle(arr);
           this.symbols[name] = shuffleArr;
-          rolledSymbols.push(shuffleArr[0]);
+          selectedSymbols.push(shuffleArr[0]);
         }
 
-        if (this.credit >= 40 && this.credit < 60) {
+        if (this.credits >= 40 && this.credits < 60) {
           const shouldReroll = Math.random() < 0.3;
           if (shouldReroll) {
             this.spin();
           }
-        } else if (this.credit >= 60) {
+        } else if (this.credits >= 60) {
           const shouldReroll = Math.random() < 0.6;
           if (shouldReroll) {
             this.spin();
           }
         }
 
+        console.log(
+          (selectedSymbols[0].value === selectedSymbols[1].value) ===
+            selectedSymbols[2].value
+        );
         if (
-          rolledSymbols[0].value === rolledSymbols[1].value &&
-          rolledSymbols[1].value === rolledSymbols[2].value
+          (selectedSymbols[0].value === selectedSymbols[1].value ===
+          selectedSymbols[2].value
         ) {
-          console.log(this.credit, rolledSymbols[0].value);
-          this.audio.win.play();
-          this.credit = this.credit + rolledSymbols[0].value;
+          this.credit = this.credit + selectedSymbols[0].value;
         }
 
         setTimeout(() => {
@@ -119,18 +166,9 @@ export default {
       }
       return array;
     },
-    handleCashOutHover() {
-      const randomDirection = Math.random() < 0.5 ? -1 : 1;
-      const shouldMove = Math.random() < 0.5;
-      const shouldDisable = Math.random() < 0.4;
-
-      if (shouldMove) {
-        this.cashOutTransition = randomDirection * 300;
-      }
-
-      if (shouldDisable) {
-        this.unclickable = true;
-      }
+    cashOut() {
+      this.credits += this.reward;
+      this.reward = 0;
     },
   },
 };
@@ -173,6 +211,14 @@ body {
 
 .slots {
   display: flex;
+  /* background: rgb(255, 222, 1);
+  background: linear-gradient(
+    261deg,
+    rgba(255, 222, 1, 1) 0%,
+    rgba(255, 185, 33, 1) 100%
+  );
+  padding: 10px;
+  border-radius: 10px; */
 }
 
 .slot {
@@ -210,7 +256,7 @@ button {
   padding: 5px;
   border-radius: 5px;
   color: white;
-  width: 30%;
+  width: 50%;
   font-size: 20px;
   font-weight: bold;
 }
@@ -233,16 +279,5 @@ button {
 
 .spinner:hover {
   background-position: right center;
-}
-
-.cashOut {
-  height: 80px;
-  width: 80px;
-  font-size: 14px;
-  border-radius: 50%;
-}
-
-.unclickable {
-  pointer-events: none;
 }
 </style>

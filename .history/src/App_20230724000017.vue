@@ -21,13 +21,9 @@
           Spin
         </button>
         <button
-          :disabled="isShuffling || credit === 0"
+          :disabled="isShuffling || credits === 0"
           :class="[{ unclickable: unclickable }, 'cashOut']"
-          :style="{
-            transform:
-              `translateX(${cashOutTransition}px)` ||
-              `translateY(${cashOutTransition}px)`,
-          }"
+          :style="{ transform: `translate(${cashOutTransition}px)` }"
           @mouseover="handleCashOutHover"
         >
           CASH OUT
@@ -39,7 +35,6 @@
 
 <script>
 import SlotBox from "./components/SlotBox.vue";
-import { rollsSymbols } from "./constant/rollsSymbols";
 
 export default {
   name: "App",
@@ -48,7 +43,74 @@ export default {
   },
   data() {
     return {
-      symbols: rollsSymbols,
+      symbols: {
+        firstSlot: [
+          {
+            name: "cherry",
+            value: 10,
+            emoji: "🍒",
+          },
+          {
+            name: "lemon",
+            value: 20,
+            emoji: "🍋",
+          },
+          {
+            name: "orange",
+            value: 30,
+            emoji: "🍊",
+          },
+          {
+            name: "watermelon",
+            value: 40,
+            emoji: "🍉",
+          },
+        ],
+        secondSlot: [
+          {
+            name: "cherry",
+            value: 10,
+            emoji: "🍒",
+          },
+          {
+            name: "lemon",
+            value: 20,
+            emoji: "🍋",
+          },
+          {
+            name: "orange",
+            value: 30,
+            emoji: "🍊",
+          },
+          {
+            name: "watermelon",
+            value: 40,
+            emoji: "🍉",
+          },
+        ],
+        thirdSlot: [
+          {
+            name: "cherry",
+            value: 10,
+            emoji: "🍒",
+          },
+          {
+            name: "lemon",
+            value: 20,
+            emoji: "🍋",
+          },
+          {
+            name: "orange",
+            value: 30,
+            emoji: "🍊",
+          },
+          {
+            name: "watermelon",
+            value: 40,
+            emoji: "🍉",
+          },
+        ],
+      },
       isShuffling: false,
       credit: 10,
       audio: {
@@ -81,12 +143,12 @@ export default {
           rolledSymbols.push(shuffleArr[0]);
         }
 
-        if (this.credit >= 40 && this.credit < 60) {
+        if (this.credits >= 40 && this.credits < 60) {
           const shouldReroll = Math.random() < 0.3;
           if (shouldReroll) {
             this.spin();
           }
-        } else if (this.credit >= 60) {
+        } else if (this.credits >= 60) {
           const shouldReroll = Math.random() < 0.6;
           if (shouldReroll) {
             this.spin();
@@ -125,6 +187,8 @@ export default {
       const shouldDisable = Math.random() < 0.4;
 
       if (shouldMove) {
+        // const button = document.querySelector(".cash-out-button");
+        // button.style.transform = `translateX(${randomDirection * 300}px)`;
         this.cashOutTransition = randomDirection * 300;
       }
 
@@ -173,6 +237,14 @@ body {
 
 .slots {
   display: flex;
+  /* background: rgb(255, 222, 1);
+  background: linear-gradient(
+    261deg,
+    rgba(255, 222, 1, 1) 0%,
+    rgba(255, 185, 33, 1) 100%
+  );
+  padding: 10px;
+  border-radius: 10px; */
 }
 
 .slot {
